@@ -3,7 +3,11 @@
 #define STACK_INIT_SIZE 100
 #define STACKINCREMENT 10
 typedef int ElemType;
+#ifdef __REDEFINE__
+typedef BiTree SElemType;
+#else
 typedef ElemType SElemType;
+#endif
 
 typedef struct{
   SElemType *base;
@@ -82,7 +86,7 @@ Status StackTraverse(SqStack S, Status(*visit)(SElemType)){
   return OK;
 }
 
-
+#ifndef __MAIN__
 Status visit(SElemType c)
 {
   printf("%d ",c);
@@ -91,7 +95,8 @@ Status visit(SElemType c)
 
 void conversion(){
   printf("Enter a decimal\n");
-  int n, e;
+  SElemType n;
+  SElemType e;
   SqStack S;
   InitStack(&S);
   scanf("%d", &n);
@@ -104,7 +109,9 @@ void conversion(){
     printf("%d", e);
   }
 }
+#endif
 
+#ifndef __MAIN__
 void main()
 {
   int j;
@@ -129,3 +136,4 @@ void main()
   printf("销毁栈后，s.top=%u s.base=%u s.stacksize=%d\n",s.top,s.base, s.stacksize);
   conversion();
 }
+#endif

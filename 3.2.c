@@ -1,6 +1,10 @@
 // 队列的链式存储
 #include"include/header.h"
+#ifdef __REDEFINE__
+typedef BiTree QElemType;
+#else
 typedef int QElemType;
+#endif
 
 typedef struct QNode{
   QElemType data;
@@ -77,13 +81,16 @@ Status EnQueue(LinkQueue *Q, QElemType e){
 }
 
 Status DeQueue(LinkQueue *Q, QElemType *e){
-  if(! QueueEmpty(*Q)){
-    *e = Q->front->next->data;
-    Q->front->next = Q->front->next->next;
-    return OK;
-  }else{
+  QueuePtr p;
+  if((*Q).front==(*Q).rear)
     return ERROR;
-  }
+  p=(*Q).front->next;
+  *e=p->data;
+  (*Q).front->next=p->next;
+  if((*Q).rear==p)
+    (*Q).rear=(*Q).front;
+  free(p);
+  return OK;
 }
 
 Status QueueTraverse(LinkQueue Q, void visit(QElemType)){
@@ -112,6 +119,7 @@ void visit(QElemType i)
   printf("%d ",i);
 }
 
+#ifndef __MAIN__
 void main()
 {
   int i;
@@ -142,4 +150,4 @@ void main()
   DestroyQueue(&q);
   printf("销毁队列后,q.front=%u q.rear=%u\n",q.front, q.rear);
 }
-
+#endif
